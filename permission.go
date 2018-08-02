@@ -1,9 +1,11 @@
 package rbac
 
-// A Permission is a function that returns a bool representing
-// whether or not the action is allowed on the target.
+// A Permission is a function that returns true if the action is allowed on the target
 type Permission func(action, target string) (bool, error)
 
+// NewPermission returns a Permission that will return true
+// if the actionMatcher returns true for the given action,
+// and at least one of the targetMatchers returns true for the given target.
 func NewPermission(actionMatcher Matcher, targetMatchers ...Matcher) Permission {
 	return func(action, target string) (bool, error) {
 		actionMatch, err := actionMatcher(action)
