@@ -18,8 +18,8 @@ Guest, User, Admin
 
 func main() {
 	admin := permissions.NewAdminRole()
-	johnDoe := permissions.NewUserRole("John Doe", nil)
+	johnDoe := permissions.NewUserRole("John Doe", nil, nil)
 	guest := permissions.NewGuestRole()
 
-	fmt.Println(admin, guest)
+	fmt.Println(admin, johnDoe, guest)
 }
