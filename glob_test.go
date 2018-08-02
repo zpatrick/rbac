@@ -8,7 +8,7 @@ import (
 )
 
 func TestGlobPermission(t *testing.T) {
-	RunPermissionsTest(t, []PermissionTestCase{
+	cases := []PermissionTestCase{
 		{
 			Name:       "All",
 			Permission: NewGlobPermission("*", "*"),
@@ -79,5 +79,7 @@ func TestGlobPermission(t *testing.T) {
 				assert.Equal(t, strings.Contains(target, "a") || strings.Contains(target, "b"), result)
 			},
 		},
-	})
+	}
+
+	RunPermissionsTest(t, cases)
 }

@@ -7,7 +7,7 @@ import (
 )
 
 func TestStringPermission(t *testing.T) {
-	RunPermissionsTest(t, []PermissionTestCase{
+	cases := []PermissionTestCase{
 		{
 			Name:       "None",
 			Permission: NewStringPermission("", ""),
@@ -36,5 +36,7 @@ func TestStringPermission(t *testing.T) {
 				assert.Equal(t, target == "alpha" || target == "beta", result)
 			},
 		},
-	})
+	}
+
+	RunPermissionsTest(t, cases)
 }

@@ -6,7 +6,7 @@ type Role struct {
 	Permissions []Permission
 }
 
-// Can returns true if the Role is allowed to perform the action on the target 
+// Can returns true if the Role is allowed to perform the action on the target
 func (r Role) Can(action, target string) (bool, error) {
 	for _, permission := range r.Permissions {
 		can, err := permission(action, target)
