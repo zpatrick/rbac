@@ -52,7 +52,7 @@ type PermissionTestCase struct {
 	Assert     func(t *testing.T, action, target string, result bool)
 }
 
-func RunPermissionsTest(t *testing.T, cases []PermissionTestCase) {
+func RunPermissionsTest(t *testing.T, cases ...PermissionTestCase) {
 	for _, c := range cases {
 		for _, action := range Actions {
 			for _, target := range Targets {

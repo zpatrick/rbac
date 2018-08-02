@@ -38,5 +38,5 @@ func TestStringPermission(t *testing.T) {
 		},
 	}
 
-	RunPermissionsTest(t, cases)
+	RunPermissionsTest(t, cases...)
 }

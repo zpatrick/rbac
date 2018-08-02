@@ -81,5 +81,5 @@ func TestGlobPermission(t *testing.T) {
 		},
 	}
 
-	RunPermissionsTest(t, cases)
+	RunPermissionsTest(t, cases...)
 }
