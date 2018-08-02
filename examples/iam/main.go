@@ -27,11 +27,11 @@ func main() {
 			},
 		},
 		{
-                        RoleID: "S3BucketReadOnly",
-                        Permissions: []rbac.Permission{
-                                rbac.NewGlobPermission("read:*", "arn:aws:s3:::my_bucket*"),
-                        },
-                },
+			RoleID: "S3BucketReadOnly",
+			Permissions: []rbac.Permission{
+				rbac.NewGlobPermission("read:*", "arn:aws:s3:::my_bucket*"),
+			},
+		},
 	}
 
 	fmt.Println(iamStyleRoles)

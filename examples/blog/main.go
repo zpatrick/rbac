@@ -86,16 +86,15 @@ var books = []Book{
 		Content: "Once upon a bye, there was a mischievous boy named Tom Sawyer...",
 	},
 	{
-                Title:   "1984",
-                Author:  "George Orwell",
-                Content: "It was a bright day in April, and the clocks were striking thirteen....",
-        },
+		Title:   "1984",
+		Author:  "George Orwell",
+		Content: "It was a bright day in April, and the clocks were striking thirteen....",
+	},
 	{
 		Title:   "Old Man and the Sea",
 		Author:  "Ernest Hemingway",
 		Content: "He was an old man who fished alone in a skiff in the Gulf Stream...",
 	},
-		
 }
 
 var users = []User{
