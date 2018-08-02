@@ -1,6 +1,6 @@
 package comment
 
-type Comment struct{
+type Comment struct {
 	UserID string
-	Text string
+	Text   string
 }

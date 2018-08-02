@@ -1,6 +1,6 @@
 package entry
 
-type Entry struct{
+type Entry struct {
 	UserID string
-	Text string
+	Text   string
 }
