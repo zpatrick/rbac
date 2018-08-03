@@ -10,7 +10,7 @@ func TestStringPermission(t *testing.T) {
 	cases := []PermissionTestCase{
 		{
 			Name:       "None",
-			Permission: NewStringPermission("", ""),
+			Permission: NewStringPermission(""),
 			Assert: func(t *testing.T, action, target string, result bool) {
 				assert.False(t, result)
 			},
