@@ -10,7 +10,7 @@ func TestStringPermission(t *testing.T) {
 	cases := []PermissionTestCase{
 		{
 			Name:       "None",
-			Permission: NewStringPermission(""),
+			Permission: NewStringPermission("", ""),
 			Assert: func(t *testing.T, action, target string, result bool) {
 				assert.False(t, result)
 			},
@@ -27,13 +27,6 @@ func TestStringPermission(t *testing.T) {
 			Permission: NewPermission(Always, StringMatch("alpha")),
 			Assert: func(t *testing.T, action, target string, result bool) {
 				assert.Equal(t, target == "alpha", result)
-			},
-		},
-		{
-			Name:       "ExactTargetsMatch",
-			Permission: NewPermission(Always, StringMatch("alpha"), StringMatch("beta")),
-			Assert: func(t *testing.T, action, target string, result bool) {
-				assert.Equal(t, target == "alpha" || target == "beta", result)
 			},
 		},
 	}

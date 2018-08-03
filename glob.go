@@ -11,11 +11,6 @@ func GlobMatch(pattern string) Matcher {
 }
 
 // NewGlobPermission returns a Permission that uses GlobMatchers for the specified action and target patterns.
-func NewGlobPermission(actionPattern string, targetPatterns ...string) Permission {
-	targetMatchers := make([]Matcher, len(targetPatterns))
-	for i, targetPattern := range targetPatterns {
-		targetMatchers[i] = GlobMatch(targetPattern)
-	}
-
-	return NewPermission(GlobMatch(actionPattern), targetMatchers...)
+func NewGlobPermission(actionPattern, targetPattern string) Permission {
+	return NewPermission(GlobMatch(actionPattern), GlobMatch(targetPattern))
 }

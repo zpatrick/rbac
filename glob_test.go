@@ -10,6 +10,20 @@ import (
 func TestGlobPermission(t *testing.T) {
 	cases := []PermissionTestCase{
 		{
+			Name:       "AllowAll",
+			Permission: NewGlobPermission("*", "*"),
+			Assert: func(t *testing.T, action, target string, result bool) {
+				assert.True(t, result)
+			},
+		},
+		{
+			Name:       "AllowNone",
+			Permission: NewGlobPermission("", ""),
+			Assert: func(t *testing.T, action, target string, result bool) {
+				assert.False(t, result)
+			},
+		},
+		{
 			Name:       "AnyAction",
 			Permission: NewPermission(GlobMatch("*"), Always),
 			Assert: func(t *testing.T, action, target string, result bool) {
@@ -18,7 +32,7 @@ func TestGlobPermission(t *testing.T) {
 		},
 		{
 			Name:       "NoAction",
-			Permission: NewGlobPermission(""),
+			Permission: NewPermission(GlobMatch(""), Always),
 			Assert: func(t *testing.T, action, target string, result bool) {
 				assert.False(t, result)
 			},
@@ -63,20 +77,6 @@ func TestGlobPermission(t *testing.T) {
 			Permission: NewPermission(Always, GlobMatch("*a*")),
 			Assert: func(t *testing.T, action, target string, result bool) {
 				assert.Equal(t, strings.Contains(target, "a"), result)
-			},
-		},
-		{
-			Name:       "ExactTargetsMatch",
-			Permission: NewPermission(Always, GlobMatch("alpha"), GlobMatch("beta")),
-			Assert: func(t *testing.T, action, target string, result bool) {
-				assert.Equal(t, target == "alpha" || target == "beta", result)
-			},
-		},
-		{
-			Name:       "GlobTargetsMatch",
-			Permission: NewPermission(Always, GlobMatch("*a*"), GlobMatch("*b*")),
-			Assert: func(t *testing.T, action, target string, result bool) {
-				assert.Equal(t, strings.Contains(target, "a") || strings.Contains(target, "b"), result)
 			},
 		},
 	}

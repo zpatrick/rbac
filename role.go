@@ -6,7 +6,7 @@ type Role struct {
 	Permissions Permissions
 }
 
-// Can returns true if the Role is allowed to perform the action on each of the targets.
-func (r Role) Can(action string, targets ...string) (bool, error) {
-	return r.Permissions.Can(action, targets...)
+// Can returns true if the Role is allowed to perform the action on the target.
+func (r Role) Can(action, target string) (bool, error) {
+	return r.Permissions.Can(action, target)
 }

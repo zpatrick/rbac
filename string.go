@@ -9,11 +9,6 @@ func StringMatch(pattern string) Matcher {
 }
 
 // NewStringPermission returns a Permission that uses StringMatchers for the specified action and targets.
-func NewStringPermission(action string, targets ...string) Permission {
-	targetMatchers := make([]Matcher, len(targets))
-	for i, target := range targets {
-		targetMatchers[i] = StringMatch(target)
-	}
-
-	return NewPermission(StringMatch(action), targetMatchers...)
+func NewStringPermission(action, target string) Permission {
+	return NewPermission(StringMatch(action), StringMatch(target))
 }
