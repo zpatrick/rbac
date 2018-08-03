@@ -10,20 +10,6 @@ import (
 func TestGlobPermission(t *testing.T) {
 	cases := []PermissionTestCase{
 		{
-			Name:       "All",
-			Permission: NewGlobPermission("*", "*"),
-			Assert: func(t *testing.T, action, target string, result bool) {
-				assert.True(t, result)
-			},
-		},
-		{
-			Name:       "None",
-			Permission: NewGlobPermission("", ""),
-			Assert: func(t *testing.T, action, target string, result bool) {
-				assert.False(t, result)
-			},
-		},
-		{
 			Name:       "AnyAction",
 			Permission: NewPermission(GlobMatch("*"), Always),
 			Assert: func(t *testing.T, action, target string, result bool) {
@@ -31,10 +17,24 @@ func TestGlobPermission(t *testing.T) {
 			},
 		},
 		{
+			Name:       "NoAction",
+			Permission: NewGlobPermission(""),
+			Assert: func(t *testing.T, action, target string, result bool) {
+				assert.False(t, result)
+			},
+		},
+		{
 			Name:       "AnyTarget",
 			Permission: NewPermission(Always, GlobMatch("*")),
 			Assert: func(t *testing.T, action, target string, result bool) {
 				assert.True(t, result)
+			},
+		},
+		{
+			Name:       "NoTarget",
+			Permission: NewPermission(Always, GlobMatch("")),
+			Assert: func(t *testing.T, action, target string, result bool) {
+				assert.False(t, result)
 			},
 		},
 		{
