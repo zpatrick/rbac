@@ -2,13 +2,8 @@ package rbac
 
 import (
 	"fmt"
-	"os"
 	"testing"
 )
-
-func TestMain(m *testing.M) {
-	os.Exit(m.Run())
-}
 
 var Actions = []string{
 	"create",
