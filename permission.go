@@ -1,28 +1,5 @@
 package rbac
 
-
-/*
-TODO: Investigate if variadic target paramaeter is a good option.
-This would allow a more dynamic set of targets to be made on an action.
-For example:
-	if role.Can(ListUsers)
-	if role.Can(DeleteUser, userID)
-	if role.Can(TransferObjectOwnership, objectID, userID)  
-
-The associated permissions may be:
-	// role can list all users
-	rbac.NewGlobPermission(ListUsers)	
-	
-	// role can only delete current user
-	rbac.NewGlobPermission(DeleteUser, userID)
-	
-	// role can only tranfer objects that they own, to users who are friends
-	rbac.NewGlobPermission(TranferObjectOwnership, IfObjectOwner(userID), IfUserIsFriend(userID))
-*/
-
-
-
-
 // A Permission is a function that returns true if the action is allowed on the target
 type Permission func(action string, target string) (bool, error)
 
@@ -59,11 +36,11 @@ func NewPermission(actionMatcher, targetMatcher Matcher) Permission {
 			return false, nil
 		}
 
-		targetMatch, err := targetMatcher(target)
-		if err != nil {
-			return false, err
-		}
-
-		return targetMatch, nil
+		return targetMatcher(target)
 	}
+}
+
+// Anything is a Permission that always returns true
+func Anything(action, target string) (bool, error) {
+	return true, nil
 }

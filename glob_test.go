@@ -1,85 +1,64 @@
 package rbac
 
 import (
-	"strings"
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGlobPermission(t *testing.T) {
-	cases := []PermissionTestCase{
-		{
-			Name:       "AllowAll",
-			Permission: NewGlobPermission("*", "*"),
-			Assert: func(t *testing.T, action, target string, result bool) {
-				assert.True(t, result)
-			},
+func TestGlobMatch(t *testing.T) {
+	cases := map[string]map[string]bool{
+		"": {
+			"":        true,
+			"alpha":   false,
+			"beta":    false,
+			"charlie": false,
 		},
-		{
-			Name:       "AllowNone",
-			Permission: NewGlobPermission("", ""),
-			Assert: func(t *testing.T, action, target string, result bool) {
-				assert.False(t, result)
-			},
+		"*": map[string]bool{
+			"":        true,
+			"alpha":   true,
+			"beta":    true,
+			"charlie": true,
 		},
-		{
-			Name:       "AnyAction",
-			Permission: NewPermission(GlobMatch("*"), Always),
-			Assert: func(t *testing.T, action, target string, result bool) {
-				assert.True(t, result)
-			},
+		"alpha": {
+			"":        false,
+			"alpha":   true,
+			"beta":    false,
+			"charlie": false,
 		},
-		{
-			Name:       "NoAction",
-			Permission: NewPermission(GlobMatch(""), Always),
-			Assert: func(t *testing.T, action, target string, result bool) {
-				assert.False(t, result)
-			},
+		"a*": {
+			"":        false,
+			"alpha":   true,
+			"beta":    false,
+			"charlie": false,
 		},
-		{
-			Name:       "AnyTarget",
-			Permission: NewPermission(Always, GlobMatch("*")),
-			Assert: func(t *testing.T, action, target string, result bool) {
-				assert.True(t, result)
-			},
+		"*a": {
+			"":        false,
+			"alpha":   true,
+			"beta":    true,
+			"charlie": false,
 		},
-		{
-			Name:       "NoTarget",
-			Permission: NewPermission(Always, GlobMatch("")),
-			Assert: func(t *testing.T, action, target string, result bool) {
-				assert.False(t, result)
-			},
-		},
-		{
-			Name:       "ExactActionMatch",
-			Permission: NewPermission(GlobMatch("read"), Always),
-			Assert: func(t *testing.T, action, target string, result bool) {
-				assert.Equal(t, action == "read", result)
-			},
-		},
-		{
-			Name:       "GlobActionMatch",
-			Permission: NewPermission(GlobMatch("*a*"), Always),
-			Assert: func(t *testing.T, action, target string, result bool) {
-				assert.Equal(t, strings.Contains(action, "a"), result)
-			},
-		},
-		{
-			Name:       "ExactTargetMatch",
-			Permission: NewPermission(Always, GlobMatch("alpha")),
-			Assert: func(t *testing.T, action, target string, result bool) {
-				assert.Equal(t, target == "alpha", result)
-			},
-		},
-		{
-			Name:       "GlobTargetMatch",
-			Permission: NewPermission(Always, GlobMatch("*a*")),
-			Assert: func(t *testing.T, action, target string, result bool) {
-				assert.Equal(t, strings.Contains(target, "a"), result)
-			},
+		"*a*": {
+			"":        false,
+			"alpha":   true,
+			"beta":    true,
+			"charlie": true,
 		},
 	}
 
-	RunPermissionsTest(t, cases...)
+	for pattern, inputs := range cases {
+		matcher := GlobMatch(pattern)
+		for input, expected := range inputs {
+			name := fmt.Sprintf("%s/%s", pattern, input)
+			t.Run(name, func(t *testing.T) {
+				result, err := matcher(input)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				assert.Equal(t, expected, result)
+			})
+		}
+	}
 }

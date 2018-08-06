@@ -8,8 +8,3 @@ type Matcher func(target string) (bool, error)
 func Always(target string) (bool, error) {
 	return true, nil
 }
-
-// Never is a Matcher that always returns false
-func Never(target string) (bool, error) {
-	return false, nil
-}
