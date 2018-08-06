@@ -6,6 +6,7 @@ import (
 	"github.com/zpatrick/rbac"
 )
 
+// NewAdminRole returns a rbac.Role that can do any action on any target.
 func NewAdminRole() rbac.Role {
 	return rbac.Role{
 		RoleID: "Admin",
@@ -15,6 +16,7 @@ func NewAdminRole() rbac.Role {
 	}
 }
 
+// NewReadOnlyRole returns a rbac.Role that can do any "read" action on any target.
 func NewReadOnlyRole() rbac.Role {
 	return rbac.Role{
 		RoleID: "Admin",
@@ -24,6 +26,8 @@ func NewReadOnlyRole() rbac.Role {
 	}
 }
 
+// NewEC2AdminRole returns a rbac.Role that can do any action
+// as long as the target belongs to the "ec2" service.
 func NewEC2AdminRole() rbac.Role {
 	return rbac.Role{
 		RoleID: "EC2Admin",
@@ -33,6 +37,8 @@ func NewEC2AdminRole() rbac.Role {
 	}
 }
 
+// NewS3BucketReadOnlyRole returns a rbac.Role that can do any "read" action
+// as long as the target belongs to the specified S3 bucket.
 func NewS3BucketReadOnlyRole(bucket string) rbac.Role {
 	return rbac.Role{
 		RoleID: "S3BucketReadOnly",
