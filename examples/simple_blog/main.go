@@ -1,67 +1,86 @@
 package main
 
 import (
+	"flag"
 	"fmt"
+	"log"
+	"os"
+	"strings"
+	"text/tabwriter"
 
 	"github.com/zpatrick/rbac"
 )
 
-type Article struct {
-	ArticleID string
-	Text      string
-}
+/*
+$ go run main.go [-role=guest]
+Current Role: "Guest"
+Action		Target	Allowed?
+CreateArticle	""	No
+ReadArticle	a1	Yes
+DeleteArticle	a1	No
+EditArticle	a1	No
+RateArticle	a1	Yes
 
-func printArticle(role rbac.Role, article Article) error {
-	can, err := role.Can("ReadArticle", article.ArticleID)
-	if err != nil {
-		return err
-	}
-
-	if !can {
-		return fmt.Errorf("role '%s' is not allowed to read article '%s'", role.RoleID, article.ArticleID)
-	}
-
-	fmt.Printf("[Role:%s] [Article:%s] %s\n", role.RoleID, article.ArticleID, article.Text)
-	return nil
-}
+$ go run main.go -role=admin
+Current Role: "Admin"
+Action          Target  Allowed?
+CreateArticle   ""      No
+ReadArticle     a1      Yes
+DeleteArticle   a1      No
+EditArticle     a1      No
+RateArticle     a1      Yes
+*/
 
 func main() {
-	articles := []Article{
-		{
-			ArticleID: "welcome",
-			Text:    "Welcome to...",
-		},
-		{
-			ArticleID: "a123",
-			Text:      "Five-star WR Blake Miller signs letter of intent...",
-		},
-		{
-			ArticleID: "a456",
-			Text:      "Late in the fourth quarter, senior quarterback Riley...",
-		},
+	roleName := flag.String("role", "guest", "the role to use")
+	flag.Parse()
+
+	// assign a role
+	var role rbac.Role
+	switch r := strings.ToLower(*roleName); r {
+	case "guest":
+		role = NewGuestRole()
+	case "admin":
+		role = NewAdminRole()
+	default:
+		log.Fatalf("Role '%s' not recognized. Only 'guest' or 'admin' may be used.", r)
 	}
 
-	// the guest role is only allowed to read the 'welcome' article
-	guest := rbac.Role{
-		RoleID: "guest",
-		Permissions: []rbac.Permission{
-			rbac.NewGlobPermission("ReadArticle", "welcome"),
-		},
+	// calculate role permissions
+	canCreate, err := role.Can("CreateArticle", "")
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	// the member role can read any article
-	member := rbac.Role{
-		RoleID: "member",
-		Permissions: []rbac.Permission{
-			rbac.NewGlobPermission("ReadArticle", "*"),
-		},
+	canRead, err := role.Can("ReadArticle", "a1")
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	for _, role := range []rbac.Role{guest, member} {
-		for _, article := range articles {
-			if err := printArticle(role, article); err != nil {
-				fmt.Printf("ERROR: %s\n", err.Error())
-			}
-		}
+	canEdit, err := role.Can("CreateArticle", "a1")
+	if err != nil {
+		log.Fatal(err)
 	}
+
+	canDelete, err := role.Can("DeleteArticle", "a1")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	canRate, err := role.Can("RateArticle", "a1")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// print role permissions
+	w := tabwriter.NewWriter(os.Stdout, 20, 4, 0, ' ', 0)
+	fmt.Fprintf(w, "Role: %s\n", role.RoleID)
+	fmt.Fprintln(w, "Action\tTarget\tAllowed")
+	fmt.Fprintln(w, "-----------------------------------------------")
+	fmt.Fprintf(w, "CreateArticle\t-\t%t\n", canCreate)
+	fmt.Fprintf(w, "ReadArticle\ta1\t%t\n", canRead)
+	fmt.Fprintf(w, "EditArticle\ta1\t%t\n", canEdit)
+	fmt.Fprintf(w, "DeleteArticle\ta1\t%t\n", canDelete)
+	fmt.Fprintf(w, "RateArticle\ta1\t%t\n", canRate)
+	w.Flush()
 }
