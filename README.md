@@ -30,7 +30,7 @@ Not all actions require a target.
 A permission should always allow (as opposed to deny) action(s) to be made on target(s), since nothing is allowed by default. 
 * **Role**: A [role](https://godoc.org/github.com/zpatrick/rbac#Role) is essentially a grouping of permissions. 
 The [`role.Can`](https://godoc.org/github.com/zpatrick/rbac#Role.Can) function should be used to determine whether or not a role can do an action on a target. 
-A role is only allowed to do something if it has a permission that allows it. 
+A role is only allowed to do something if it has at least one permission that allows it. 
 
 ## License
 This work is published under the MIT license.
