@@ -35,11 +35,13 @@ To put it more simply: this permission allows the **Admin** role to do anything.
 admin := NewAdminRole()
 
 // rbac.NewGlobPermission("*", "*") will cause this to return true since
-// "ReadArticle" glob matches the first "*", and "article_id" glob matches the second "*"
+// the "ReadArticle" action glob matches the "*" actionPattern in the permission
+// and the "article_id" target glob matches the "*" targetPattern in the permission. 
 admin.Can("ReadArticle", "article_id")
 
 // rbac.NewGlobPermission("*", "*") will cause this to return true since
-// "DeleteArticle" glob matches the first "*", and "article_id" glob matches the second "*"
+// the "DeleteArticle" action glob matches the "*" actionPattern in the permission
+// and the "article_id" target glob matches the "*" targetPattern in the permission. 
 admin.Can("DeleteArticle", "article_id")
 ```
 
@@ -67,10 +69,11 @@ To put it more simply: this permission allows the **Guest** role to rate any art
 guest := NewGuestRole()
 
 // rbac.NewGlobPermission("ReadArticle", "*") will cause this to return true since
-// "ReadArticle" glob matches "ReadArticle", and "article_id" glob matches the second "*"
+// the "ReadArticle" action glob matches the "ReadArticle" actionPattern in the permission
+// and the "article_id" target glob matches the "*" targetPattern in the permission. 
 guest.Can("ReadArticle", "article_id") 
 
-// this will return false because there are no permissions for this role
-// that glob match "DeleteArticle"
+// this will return false beacause the guest role has no permissions 
+// that match the "DeleteArticle" action
 guest.Can("DeleteArticle", "article_id") 
 ```
