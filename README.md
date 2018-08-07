@@ -15,7 +15,7 @@ go get github.com/zpatrick/rbac
 
 ## Getting Started
 This section will go over some of the basic concepts and an example of how to use `rbac` in an application.
-For more advanced usage, please see the [examples](/tree/master/examples) directory. 
+For more advanced usage, please see the [examples](/examples) directory. 
 
 
 There are 4 basic concepts in the `rbac` package:
