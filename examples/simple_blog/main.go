@@ -11,25 +11,7 @@ import (
 	"github.com/zpatrick/rbac"
 )
 
-/*
-$ go run main.go [-role=guest]
-Current Role: "Guest"
-Action		Target	Allowed?
-CreateArticle	""	No
-ReadArticle	a1	Yes
-DeleteArticle	a1	No
-EditArticle	a1	No
-RateArticle	a1	Yes
-
-$ go run main.go -role=admin
-Current Role: "Admin"
-Action          Target  Allowed?
-CreateArticle   ""      No
-ReadArticle     a1      Yes
-DeleteArticle   a1      No
-EditArticle     a1      No
-RateArticle     a1      Yes
-*/
+const Target = "a1"
 
 func main() {
 	roleName := flag.String("role", "guest", "the role to use")
@@ -52,22 +34,22 @@ func main() {
 		log.Fatal(err)
 	}
 
-	canRead, err := role.Can("ReadArticle", "a1")
+	canRead, err := role.Can("ReadArticle", Target)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	canEdit, err := role.Can("CreateArticle", "a1")
+	canEdit, err := role.Can("CreateArticle", Target)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	canDelete, err := role.Can("DeleteArticle", "a1")
+	canDelete, err := role.Can("DeleteArticle", Target)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	canRate, err := role.Can("RateArticle", "a1")
+	canRate, err := role.Can("RateArticle", Target)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -78,9 +60,9 @@ func main() {
 	fmt.Fprintln(w, "Action\tTarget\tAllowed")
 	fmt.Fprintln(w, "-----------------------------------------------")
 	fmt.Fprintf(w, "CreateArticle\t-\t%t\n", canCreate)
-	fmt.Fprintf(w, "ReadArticle\ta1\t%t\n", canRead)
-	fmt.Fprintf(w, "EditArticle\ta1\t%t\n", canEdit)
-	fmt.Fprintf(w, "DeleteArticle\ta1\t%t\n", canDelete)
-	fmt.Fprintf(w, "RateArticle\ta1\t%t\n", canRate)
+	fmt.Fprintf(w, "ReadArticle\t%s\t%t\n", Target, canRead)
+	fmt.Fprintf(w, "EditArticle\t%s\t%t\n", Target, canEdit)
+	fmt.Fprintf(w, "DeleteArticle\t%s\t%t\n", Target, canDelete)
+	fmt.Fprintf(w, "RateArticle\t%s\t%t\n", Target, canRate)
 	w.Flush()
 }
