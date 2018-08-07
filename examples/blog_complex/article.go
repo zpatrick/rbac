@@ -22,7 +22,7 @@ func Articles() []Article {
 		},
 		{
 			ArticleID: "a3",
-			AuthorID:  "u2",
+			AuthorID:  "u3",
 			Text:      "If last week's scrimmage is any indicator, this season...",
 		},
 	}

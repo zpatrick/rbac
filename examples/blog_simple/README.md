@@ -14,7 +14,7 @@ Run this program with the following commands:
 ```console
 $ go run *.go
 Role: Guest
-Action              Target              Allowed
+Action              ArticleID           Allowed
 -----------------------------------------------
 CreateArticle       -                   false
 ReadArticle         a1                  true
@@ -26,7 +26,7 @@ RateArticle         a1                  true
 ```console
 $ go run *.go -role=admin
 Role: Admin
-Action              Target              Allowed
+Action              ArticleID           Allowed
 -----------------------------------------------
 CreateArticle       -                   true
 ReadArticle         a1                  true

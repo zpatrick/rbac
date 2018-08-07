@@ -1,6 +1,10 @@
 package main
 
-import "github.com/zpatrick/rbac"
+import (
+	"fmt"
+
+	"github.com/zpatrick/rbac"
+)
 
 // NewAdminRole returns a role with admin-level permissions
 func NewAdminRole() rbac.Role {
@@ -26,7 +30,7 @@ func NewGuestRole() rbac.Role {
 // NewMemberRole returns a role with member-level permissions
 func NewMemberRole(userID string) rbac.Role {
 	return rbac.Role{
-		RoleID: "Member",
+		RoleID: fmt.Sprintf("Member(%s)", userID),
 		Permissions: []rbac.Permission{
 			rbac.NewGlobPermission("CreateArticle", "*"),
 			rbac.NewGlobPermission("ReadArticle", "*"),
@@ -37,8 +41,8 @@ func NewMemberRole(userID string) rbac.Role {
 	}
 }
 
-// ifArticleAuthor returns a matcher that will only return true if 
-// the article's author matches userID. 
+// ifArticleAuthor returns a matcher that will only return true if
+// the article's author matches userID.
 func ifArticleAuthor(userID string) rbac.Matcher {
 	return func(target string) (bool, error) {
 		for _, article := range Articles() {

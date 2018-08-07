@@ -57,7 +57,7 @@ func main() {
 	// print role permissions
 	w := tabwriter.NewWriter(os.Stdout, 20, 4, 0, ' ', 0)
 	fmt.Fprintf(w, "Role: %s\n", role.RoleID)
-	fmt.Fprintln(w, "Action\tTarget\tAllowed")
+	fmt.Fprintln(w, "Action\tArticleID\tAllowed")
 	fmt.Fprintln(w, "-----------------------------------------------")
 	fmt.Fprintf(w, "CreateArticle\t-\t%t\n", canCreate)
 	fmt.Fprintf(w, "ReadArticle\t%s\t%t\n", Target, canRead)
