@@ -1,10 +1,10 @@
 package rbac
 
 // StringMatch returns a Matcher that returns true
-// if the target string matches the specified pattern.
-func StringMatch(pattern string) Matcher {
+// if the target string matches s.
+func StringMatch(s string) Matcher {
 	return func(target string) (bool, error) {
-		return pattern == target, nil
+		return target == s, nil
 	}
 }
 
