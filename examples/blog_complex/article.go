@@ -17,7 +17,7 @@ func Articles() []Article {
 		},
 		{
 			ArticleID: "a2",
-			AuthorID:  "u1",
+			AuthorID:  "u2",
 			Text:      "Late in the fourth quarter, senior quarterback Riley...",
 		},
 		{
