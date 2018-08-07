@@ -9,6 +9,31 @@ The application requires the following roles and permissions:
 | Guest | -              | Allow        | -              | -              | Allow        |
 | Admin | Allow          | Allow        | Allow          | Allow          | Allow        |
 
+## Try It Out
+Run this program with the following commands:
+```console
+$ go run *.go
+Role: Guest
+Action              Target              Allowed
+-----------------------------------------------
+CreateArticle       -                   false
+ReadArticle         a1                  true
+EditArticle         a1                  false
+DeleteArticle       a1                  false
+RateArticle         a1                  true
+```
+
+```console
+$ go run *.go -role=admin
+Role: Admin
+Action              Target              Allowed
+-----------------------------------------------
+CreateArticle       -                   true
+ReadArticle         a1                  true
+EditArticle         a1                  true
+DeleteArticle       a1                  true
+RateArticle         a1                  true
+```
  
 ## Creating the Roles
 The [roles.go](/examples/simple_blog/roles.go) file shows how one can implement this permission set.
@@ -76,30 +101,4 @@ guest.Can("ReadArticle", "article_id")
 // this will return false beacause the guest role has no permissions 
 // that match the "DeleteArticle" action
 guest.Can("DeleteArticle", "article_id") 
-```
-
-## Try It Out
-Run this program with the following commands:
-```console
-$ go run *.go
-Role: Guest
-Action              Target              Allowed
------------------------------------------------
-CreateArticle       -                   false
-ReadArticle         a1                  true
-EditArticle         a1                  false
-DeleteArticle       a1                  false
-RateArticle         a1                  true
-```
-
-```console
-$ go run *.go -role=admin
-Role: Admin
-Action              Target              Allowed
------------------------------------------------
-CreateArticle       -                   true
-ReadArticle         a1                  true
-EditArticle         a1                  true
-DeleteArticle       a1                  true
-RateArticle         a1                  true
 ```
