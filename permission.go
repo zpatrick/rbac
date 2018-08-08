@@ -40,7 +40,7 @@ func NewPermission(actionMatcher, targetMatcher Matcher) Permission {
 	}
 }
 
-// Anything is a Permission that always returns true
-func Anything(action, target string) (bool, error) {
+// AllowAll is a Permission that always returns true
+func AllowAll(action, target string) (bool, error) {
 	return true, nil
 }

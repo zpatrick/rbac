@@ -42,7 +42,7 @@ func MatchAll(matchers ...Matcher) Matcher {
 	}
 }
 
-// Always is a Matcher that always returns true
-func Always(target string) (bool, error) {
+// Anything is a Matcher that always returns true
+func Anything(target string) (bool, error) {
 	return true, nil
 }
