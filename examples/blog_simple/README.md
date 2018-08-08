@@ -36,7 +36,7 @@ RateArticle         a1                  true
 ```
  
 ## Creating the Roles
-The [roles.go](/examples/simple_blog/roles.go) file shows how one can implement this permission set.
+The [roles.go](/examples/blog_simple/roles.go) file shows how one can implement this permission set.
 
 ### Admin Role
 Since the **Admin** role is allowed to do any action (`CreateArticle`, `ReadArticle`, `EditArticle`, `DeleteArticle`, and `RateArticle`), on any target (e.g. on any article), we can define that role's permissions in the following way:
