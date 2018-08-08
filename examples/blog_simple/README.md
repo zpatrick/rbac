@@ -9,34 +9,9 @@ The application requires the following roles and permissions:
 | Guest | -              | Allow        | -              | -              | Allow        |
 | Admin | Allow          | Allow        | Allow          | Allow          | Allow        |
 
-## Try It Out
-Run this program with the following commands:
-```console
-$ go run *.go
-Role: Guest
-Action              ArticleID           Allowed
------------------------------------------------
-CreateArticle       -                   false
-ReadArticle         a1                  true
-EditArticle         a1                  false
-DeleteArticle       a1                  false
-RateArticle         a1                  true
-```
-
-```console
-$ go run *.go -role=admin
-Role: Admin
-Action              ArticleID           Allowed
------------------------------------------------
-CreateArticle       -                   true
-ReadArticle         a1                  true
-EditArticle         a1                  true
-DeleteArticle       a1                  true
-RateArticle         a1                  true
-```
  
 ## Creating the Roles
-The [roles.go](/examples/simple_blog/roles.go) file shows how one can implement this permission set.
+The [roles.go](/examples/blog_simple/roles.go) file shows how one can implement this permission set.
 
 ### Admin Role
 Since the **Admin** role is allowed to do any action (`CreateArticle`, `ReadArticle`, `EditArticle`, `DeleteArticle`, and `RateArticle`), on any target (e.g. on any article), we can define that role's permissions in the following way:
@@ -101,4 +76,30 @@ guest.Can("ReadArticle", "article_id")
 // this will return false beacause the guest role has no permissions 
 // that match the "DeleteArticle" action
 guest.Can("DeleteArticle", "article_id") 
+```
+
+## Try It Out
+You can run this program yourself to view the permission with the following commands:
+```console
+$ go run *.go
+Role: Guest
+Action              ArticleID           Allowed
+-----------------------------------------------
+CreateArticle       -                   false
+ReadArticle         a1                  true
+EditArticle         a1                  false
+DeleteArticle       a1                  false
+RateArticle         a1                  true
+```
+
+```console
+$ go run *.go -role=admin
+Role: Admin
+Action              ArticleID           Allowed
+-----------------------------------------------
+CreateArticle       -                   true
+ReadArticle         a1                  true
+EditArticle         a1                  true
+DeleteArticle       a1                  true
+RateArticle         a1                  true
 ```
