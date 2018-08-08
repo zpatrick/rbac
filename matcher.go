@@ -23,7 +23,7 @@ func MatchAny(matchers ...Matcher) Matcher {
 	}
 }
 
-// MatchAny will convert a slice of Matchers into a single Matcher
+// MatchAll will convert a slice of Matchers into a single Matcher
 // that returns true if and only if all of the specified matchers returns true.
 func MatchAll(matchers ...Matcher) Matcher {
 	return func(target string) (bool, error) {
