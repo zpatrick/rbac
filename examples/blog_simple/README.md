@@ -27,7 +27,7 @@ func NewAdminRole() rbac.Role {
 }
 ```
 The [rbac.NewGlobPermission](https://godoc.org/github.com/zpatrick/rbac#NewGlobPermission) function takes two arguments: `actionPattern` and `targetPattern`. 
-Then, it creates a permission that will return true if the requested action glob matches `actionPattern`, and if the requested target glob matches `targetPattern`. 
+Then, it creates a permission that will return true if the requested action matches `actionPattern`, and if the requested target matches `targetPattern`. 
 Since `*`is a wildcard in glob matching, we've created a permission that will return true for _any_ action on _any_ target. 
 To put it more simply: this permission allows the **Admin** role to do anything.
 
