@@ -1,94 +1,85 @@
 package rbac
 
 import (
+	"encoding/json"
+	"fmt"
 	"strings"
 )
 
 // A PolicyTemplate holds information about a Role in a templated format
 type PolicyTemplate struct {
-	RoleID      string            `json:"role_id"`
-	Permissions map[string]string `json:"permissions"`
+	RoleID              string                                            `json:"role_id"`
+	PermissionTemplates []PermissionTemplate                              `json:"permissions"`
+	constructors        map[string]func(action, target string) Permission `json:"-"`
 }
 
-// Role converts the PolicyTemplate into a Role using GlobMatchers
-
-/*
-TODO: Investigate using custom matchers
-
---- namespace_admin.json ---
-"role_id": "Namespace Admin",
-"permissions": [
-    {
-        "matcher": "glob",
-        "action": "*",
-        "target": "grid:$namespace:*"
-    }
-]
-
---- main.go ---
-var policy rbac.Policy
-if err := json.Unmarshal(data, &policy); err != nil {
-	return err
+// A PermissionTemplate holds information about a permission in templated format.
+type PermissionTemplate struct {
+	Constructor string `json:"constructor"`
+	Action      string `json:"action"`
+	Target      string `json:"target"`
 }
 
-matchers := map[string]func(target, action string) rbac.Matcher {
-        "glob": rbac.GlobMatch,
-        "string": rbab.StringMatch,
+// NewPolicyTemplate generates a new PolicyTemplate with the specified roleID.
+func NewPolicyTemplate(roleID string) *PolicyTemplate {
+	return &PolicyTemplate{
+		RoleID:              roleID,
+		PermissionTemplates: []PermissionTemplate{},
+		constructors:        DefaultConstructors(),
+	}
 }
 
-replacer := strings.NewReplacer("$namespace", "development")
-role, err := policy.Role(matchers, replacer)
-if err != nil {
-	return err
+func (p *PolicyTemplate) AddPermission(constructor, action, target string) *PolicyTemplate {
+	p.PermissionTemplates = append(p.PermissionTemplates, PermissionTemplate{constructor, action, target})
+	return p
 }
 
-role.Can("delete:comment", "grid:development:u123:comment:c456")
+func (p *PolicyTemplate) SetConstructor(name string, constructor func(action, target string) Permission) *PolicyTemplate {
+	p.constructors[name] = constructor
+	return p
 }
 
-*/
+func DefaultConstructors() map[string]func(action, target string) Permission {
+	return map[string]func(action, target string) Permission{
+		"glob":   NewGlobPermission,
+		"regex":  NewRegexPermission,
+		"string": NewStringPermission,
+	}
+}
 
+func (p *PolicyTemplate) Role(oldnew ...string) (*Role, error) {
+	role := &Role{
+		RoleID:      p.RoleID,
+		Permissions: make(Permissions, len(p.PermissionTemplates)),
+	}
 
+	replacer := strings.NewReplacer(oldnew...)
+	for i, permissionTemplate := range p.PermissionTemplates {
+		constructor, ok := p.constructors[permissionTemplate.Constructor]
+		if !ok {
+			return nil, fmt.Errorf("No constructor set for '%s'", permissionTemplate.Constructor)
+		}
 
-/*
-Do something like templates?
+		action := replacer.Replace(permissionTemplate.Action)
+		target := replacer.Replace(permissionTemplate.Target)
+		role.Permissions[i] = constructor(action, target)
+	}
 
-func main() {
-	p := rbac.NewPolicy("Admin").
-		AddPermission("glob", "read:*", "*").
-		AddPermission("glob", "*", "grid:*:$userID:*").
-		// by default, has "glob", "string", and "regex", so this wouldn't need to be done every time
-		SetMatcher("glob", rbac.GlobMatch).
-		SetMatcher("string", rbac.StringMatch).
-		SetMatcher("regex", rbac.RegexMatch)
-		
+	return role, nil
+}
 
-	// takes (...string) for replacements
-	r := p.Role("$userID", "u123")
+func (p *PolicyTemplate) UnmarshalJSON(data []byte) error {
+	type Alias PolicyTemplate
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(p),
+	}
 
-	if err := p.WriteTo(w); err != nil {
+	if err := json.Unmarshal(data, &aux); err != nil {
 		return err
 	}
 
-	policy, err := rbac.ReadPolicy(r)
-	if err := p.WriteTo(w); err != nil {
-                return err
-        }
-
-	
-}
-
-*/
-
-func (p Policy) Role(r *strings.Replacer) Role {
-	role := Role{
-		RoleID:      p.RoleID,
-		Permissions: make([]Permission, 0, len(p.Permissions)),
-	}
-
-	for target, action := range p.Permissions {
-		permission := NewGlobPermission(r.Replace(target), r.Replace(action))
-		role.Permissions = append(role.Permissions, permission)
-	}
-
-	return role
+	p.constructors = DefaultConstructors()
+	return nil
 }
