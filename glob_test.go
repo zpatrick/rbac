@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+/*
 func ExampleNewGlobPermission() {
 	role := Role{
 		Permissions: []Permission{
@@ -28,6 +29,7 @@ func ExampleNewGlobPermission() {
 	// [action: "edit:user"] [target: "user_456"] => false
 	// [action: "delete:user"] [target: "user_123"] => true
 }
+*/
 
 func TestGlobMatch(t *testing.T) {
 	cases := map[string]map[string]bool{
