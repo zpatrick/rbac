@@ -3,15 +3,18 @@ package rbac
 import (
 	"encoding/json"
 	"io/ioutil"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestPolicyTemplate(t *testing.T) {
-	p := NewPolicyTemplate("Admin").
-		AddPermission("glob", "*", "grid:*:$userID:*").
-		AddPermission("glob", "read:*", "*")
+	t.Skip("TODO: read/write to/from a buffer")
+
+	p := NewPolicyTemplate("Admin")
+	p.AddPermission("glob", "*", "grid:*:$userID:*")
+	p.AddPermission("glob", "read:*", "*")
 
 	bytes, err := json.MarshalIndent(p, "", "    ")
 	if err != nil {
@@ -32,7 +35,7 @@ func TestPolicyTemplate(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	role, err := policy.Role("$userID", "u123")
+	role, err := policy.Role(strings.NewReplacer("$userID", "u123"))
 	if err != nil {
 		t.Fatal(err)
 	}
