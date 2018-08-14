@@ -19,7 +19,7 @@ func NewAdminRole() rbac.Role {
 // NewReadOnlyRole returns a rbac.Role that can do any "read" action on any target.
 func NewReadOnlyRole() rbac.Role {
 	return rbac.Role{
-		RoleID: "Admin",
+		RoleID: "ReadOnly",
 		Permissions: []rbac.Permission{
 			rbac.NewGlobPermission("read:*", "*"),
 		},
