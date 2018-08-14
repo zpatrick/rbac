@@ -26,6 +26,7 @@ Some examples are: `"Upvote"`, `"ReadArticle"`, or `"EditComment"`.
 Targets are typically expressed as an object's unique identifier, but it is ultimately up to the user how targets are expressed. 
 An example is passing an `articleID` as the target for a `"ReadArticle"` action. 
 Not all actions require a target. 
+* **Matcher**: TODO!
 * **Permission**: A [permission](https://godoc.org/github.com/zpatrick/rbac#Permission) is a function that takes an action and a target, and returns true if and only if the action is allowed on the target. 
 A permission should always allow (as opposed to deny) action(s) to be made on target(s), since nothing is allowed by default. 
 * **Role**: A [role](https://godoc.org/github.com/zpatrick/rbac#Role) is essentially a grouping of permissions. 
