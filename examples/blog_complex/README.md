@@ -77,6 +77,7 @@ func NewMemberRole(userID string) rbac.Role {
 }
 ```
 
+This is how the role could be used in an application:
 ```go
 member := NewMemberRole("u1")
 
