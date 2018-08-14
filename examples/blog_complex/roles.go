@@ -34,9 +34,9 @@ func NewMemberRole(userID string) rbac.Role {
 		Permissions: []rbac.Permission{
 			rbac.NewGlobPermission("CreateArticle", "*"),
 			rbac.NewGlobPermission("ReadArticle", "*"),
+			rbac.NewGlobPermission("RateArticle", "*"),
 			rbac.NewPermission(rbac.GlobMatch("EditArticle"), ifArticleAuthor(userID)),
 			rbac.NewPermission(rbac.GlobMatch("DeleteArticle"), ifArticleAuthor(userID)),
-			rbac.NewGlobPermission("RateArticle", "*"),
 		},
 	}
 }
