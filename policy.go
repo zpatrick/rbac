@@ -12,7 +12,7 @@ type PermissionConstructor func(action, target string) Permission
 
 // DefaultPermissionConstructors returns a mapping of constructor names to PermissionConstructor functions
 // for each of the builtin PermissionConstructors:
-//   "glob":  NewGlobPermission
+//   "glob":   NewGlobPermission
 //   "regex":  NewRegexPermission
 //   "string": NewStringPermission
 func DefaultPermissionConstructors() map[string]PermissionConstructor {
@@ -33,9 +33,9 @@ type PermissionTemplate struct {
 // A PolicyTemplate holds information about a Role in a templated format.
 // This format can be encoded to and from JSON.
 type PolicyTemplate struct {
-	RoleID              string                           `json:"role_id"`
-	PermissionTemplates []PermissionTemplate             `json:"permissions"`
-	constructors        map[string]PermissionConstructor `json:"-"`
+	RoleID              string               `json:"role_id"`
+	PermissionTemplates []PermissionTemplate `json:"permissions"`
+	constructors        map[string]PermissionConstructor
 }
 
 // NewPolicyTemplate generates a new PolicyTemplate with the specified roleID and default constructors.

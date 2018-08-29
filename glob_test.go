@@ -39,7 +39,7 @@ func TestGlobMatch(t *testing.T) {
 			"beta":    false,
 			"charlie": false,
 		},
-		"*": map[string]bool{
+		"*": {
 			"":        true,
 			"alpha":   true,
 			"beta":    true,

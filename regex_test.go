@@ -15,7 +15,7 @@ func TestRegexMatch(t *testing.T) {
 			"beta":    true,
 			"charlie": true,
 		},
-		".*": map[string]bool{
+		".*": {
 			"":        true,
 			"alpha":   true,
 			"beta":    true,
